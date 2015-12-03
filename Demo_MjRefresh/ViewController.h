@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+@class RootTableView ;
 
 @interface ViewController : UIViewController
-
-
+@property (weak, nonatomic) IBOutlet RootTableView *table;
 @end
 

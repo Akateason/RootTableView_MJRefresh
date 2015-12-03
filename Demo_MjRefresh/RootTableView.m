@@ -1,0 +1,144 @@
+//
+//  RootTableView.m
+//  Demo_MjRefresh
+//
+//  Created by TuTu on 15/12/3.
+//  Copyright © 2015年 teason. All rights reserved.
+//
+
+#import "RootTableView.h"
+#import "MJRefresh.h"
+
+@interface RootTableView ()
+@property (nonatomic,strong) NSArray *gifImageList ;
+@end
+
+@implementation RootTableView
+
+#pragma mark --
+#pragma mark - Initialization
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self setup] ;
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setup] ;
+    }
+    return self;
+}
+
+- (void)setup
+{
+    [self MJRefreshConfigure] ;
+    [self defaultPublicAPIs] ;
+}
+
+- (void)MJRefreshConfigure
+{
+    NSArray *idleImages = self.gifImageList ; //@[[self.gifImageList firstObject]] ;
+    NSArray *pullingImages = self.gifImageList ;
+    NSArray *refreshingImages = self.gifImageList ;
+    
+    MJRefreshGifHeader *header = [MJRefreshGifHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewDataSelector)];
+    [header setImages:idleImages forState:MJRefreshStateIdle];
+    [header setImages:pullingImages forState:MJRefreshStatePulling];
+    [header setImages:refreshingImages forState:MJRefreshStateRefreshing];
+    self.mj_header = header;
+
+    [self.mj_header beginRefreshing];
+    
+    MJRefreshBackGifFooter *footer = [MJRefreshBackGifFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreDataSelector)];
+    [footer setImages:idleImages forState:MJRefreshStateIdle];
+    [footer setImages:pullingImages forState:MJRefreshStatePulling];
+    [footer setImages:refreshingImages forState:MJRefreshStateRefreshing];
+    self.mj_footer = footer;
+}
+
+- (void)defaultPublicAPIs
+{
+    self.showRefreshDetail = NO ;
+    self.automaticallyLoadMore = NO ;
+}
+
+#pragma mark --
+#pragma mark - Public Properties
+- (void)setShowRefreshDetail:(BOOL)showRefreshDetail
+{
+    _showRefreshDetail = showRefreshDetail ;
+    
+    ((MJRefreshGifHeader *)self.mj_header).lastUpdatedTimeLabel.hidden = !self.showRefreshDetail;
+    ((MJRefreshGifHeader *)self.mj_header).stateLabel.hidden = !self.showRefreshDetail ;
+    ((MJRefreshBackGifFooter *)self.mj_footer).stateLabel.hidden = !self.showRefreshDetail ;
+}
+
+- (void)setAutomaticallyLoadMore:(BOOL)automaticallyLoadMore
+{
+    _automaticallyLoadMore = automaticallyLoadMore ;
+    
+    if (_automaticallyLoadMore)
+    {
+        self.mj_footer = nil ;
+        MJRefreshAutoFooter *autofooter = [MJRefreshAutoFooter footerWithRefreshingTarget:self
+                                                                         refreshingAction:@selector(loadMoreDataSelector)] ;
+        autofooter.triggerAutomaticallyRefreshPercent = 0.6 ;
+        self.mj_footer = autofooter;
+    }
+}
+
+#pragma mark - Private
+- (NSArray *)gifImageList
+{
+    if (!_gifImageList)
+    {
+        NSMutableArray *tempList = [NSMutableArray array] ;
+        for (int i = 0; i < 9; i++)
+        {
+            UIImage *imgTemp = [UIImage imageNamed:[NSString stringWithFormat:@"slice2_%d",i]] ;
+            [tempList addObject:imgTemp] ; // DEFAULT MODE IS THIS GIF IMAGES .
+        }
+        _gifImageList = [NSArray arrayWithArray:tempList] ;
+    }
+    
+    return _gifImageList ;
+}
+
+#pragma mark --
+#pragma mark - loading methods
+- (void)loadNewDataSelector
+{
+    [self.myDelegate loadNewData] ;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self reloadData];
+        [self.mj_header endRefreshing];
+    }) ;
+}
+
+- (void)loadMoreDataSelector
+{
+    [self.myDelegate loadMoreData] ;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self reloadData];
+        [self.mj_footer endRefreshing];
+    }) ;
+}
+
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+@end
