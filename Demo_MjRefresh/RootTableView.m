@@ -102,7 +102,7 @@
         NSMutableArray *tempList = [NSMutableArray array] ;
         for (int i = 0; i < 9; i++)
         {
-            UIImage *imgTemp = [UIImage imageNamed:[NSString stringWithFormat:@"slice2_%d",i]] ;
+            UIImage *imgTemp = [UIImage imageNamed:[NSString stringWithFormat:@"%@%d",TABLE_HEADER_IMAGES,i]] ;
             [tempList addObject:imgTemp] ; // DEFAULT MODE IS THIS GIF IMAGES .
         }
         _gifImageList = [NSArray arrayWithArray:tempList] ;

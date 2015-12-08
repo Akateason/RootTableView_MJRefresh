@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define TABLE_HEADER_IMAGES             @"slice2_"
+
 @protocol RootTableViewDelegate <NSObject>
 - (void)loadNewData ;
 - (void)loadMoreData ;
