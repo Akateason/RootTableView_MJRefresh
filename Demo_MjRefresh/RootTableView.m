@@ -14,6 +14,12 @@
 @end
 
 @implementation RootTableView
+#pragma mark --
+#pragma mark - Public
+- (void)pullDownRefreshHeader
+{
+    [self.mj_header beginRefreshing] ;
+}
 
 #pragma mark --
 #pragma mark - Initialization

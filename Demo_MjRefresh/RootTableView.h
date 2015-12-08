@@ -19,4 +19,5 @@
 @property (nonatomic,weak) id <RootTableViewDelegate> xt_Delegate ; // SET myDelegate TO YOUR CTRLLER
 @property (nonatomic) BOOL showRefreshDetail ;      // DEFATULT IS `NO` -> ONLY GIF IMAGES , SHOW WORDS WHEN IT BECOMES `YES`
 @property (nonatomic) BOOL automaticallyLoadMore ;  // DEFAULT IS `NO` -> MANUALLY LOADING . AUTOMATICALLY LOAD WHEN IT BECOMES `YES`
+- (void)pullDownRefreshHeader ;
 @end
