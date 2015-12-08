@@ -115,7 +115,7 @@
 #pragma mark - loading methods
 - (void)loadNewDataSelector
 {
-    [self.myDelegate loadNewData] ;
+    [self.xt_Delegate loadNewData] ;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self reloadData];
@@ -125,7 +125,7 @@
 
 - (void)loadMoreDataSelector
 {
-    [self.myDelegate loadMoreData] ;
+    [self.xt_Delegate loadMoreData] ;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self reloadData];

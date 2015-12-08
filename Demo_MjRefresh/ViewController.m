@@ -32,7 +32,7 @@
     
     self.table.dataSource = self ;
     self.table.delegate = self ;
-    self.table.myDelegate = self ;
+    self.table.xt_Delegate = self ;
    
 //    self.table.showRefreshDetail = YES ;
 //    self.table.automaticallyLoadMore = YES ;
