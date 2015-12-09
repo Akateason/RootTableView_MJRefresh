@@ -95,7 +95,7 @@
         self.mj_footer = nil ;
         MJRefreshAutoFooter *autofooter = [MJRefreshAutoFooter footerWithRefreshingTarget:self
                                                                          refreshingAction:@selector(loadMoreDataSelector)] ;
-        autofooter.triggerAutomaticallyRefreshPercent = 0.6 ;
+        autofooter.triggerAutomaticallyRefreshPercent = 0.55 ;
         self.mj_footer = autofooter;
     }
 }
@@ -106,7 +106,7 @@
     if (!_gifImageList)
     {
         NSMutableArray *tempList = [NSMutableArray array] ;
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < TABLE_HEADER_IMAGES_COUNT; i++)
         {
             UIImage *imgTemp = [UIImage imageNamed:[NSString stringWithFormat:@"%@%d",TABLE_HEADER_IMAGES,i]] ;
             [tempList addObject:imgTemp] ; // DEFAULT MODE IS THIS GIF IMAGES .
@@ -122,7 +122,11 @@
 - (void)loadNewDataSelector
 {
     [self.xt_Delegate loadNewData] ;
-    
+    [self headerEnding] ;
+}
+
+- (void)headerEnding
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         [self reloadData];
         [self.mj_header endRefreshing];
@@ -131,14 +135,32 @@
 
 - (void)loadMoreDataSelector
 {
-    [self.xt_Delegate loadMoreData] ;
+    if (_automaticallyLoadMore)
+    {
+        dispatch_queue_t queue = dispatch_queue_create("refreshAutoFooter", NULL) ;
+        dispatch_async(queue, ^{
+            [self.xt_Delegate loadMoreData] ;
+            [self footerEnding] ;
+        }) ;
+        
+        return ;
+    }
+    else
+    {
+        [self.xt_Delegate loadMoreData] ;
+    }
     
+    [self footerEnding] ;
+}
+
+- (void)footerEnding
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         [self reloadData];
         [self.mj_footer endRefreshing];
     }) ;
-}
 
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

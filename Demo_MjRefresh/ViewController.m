@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "RootTableView.h"
 
+
 @interface ViewController () <UITableViewDataSource,UITableViewDelegate,RootTableViewDelegate>
 @property (nonatomic,strong) NSMutableArray *dataList  ;
 @end
@@ -36,6 +37,7 @@
    
 //    self.table.showRefreshDetail = YES ;
 //    self.table.automaticallyLoadMore = YES ;
+    
 }
 
 
@@ -73,7 +75,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"you select : %@",self.dataList) ;
+    NSLog(@"you select : %@",self.dataList[indexPath.row]) ;
 }
 
 - (void)didReceiveMemoryWarning {
